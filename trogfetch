@@ -32,11 +32,5 @@ echo "---- GPU ----"
 echo -e 'GPU\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6)
 echo
 echo "---- RAM ----"
-
-if [ $h -gt $f ]; then
-	echo -e 'Memory\t| ' $(($f/1000))" GiB"
-	echo -e 'Swap\t| ' $(($h/1000))" GiB" 
-else
-	echo -e 'Memory\t| ' $(($i/1000))" GiB"
-        echo -e 'Swap\t| ' $(($h/1000))" GiB"
-fi
+echo -e 'Memory\t| ' $(($f/1000))" GiB"
+echo -e 'Swap\t| ' $(($h/1000))" GiB" 
