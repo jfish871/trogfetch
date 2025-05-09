@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+echo > temp.txt
+
+
+a=$(lscpu | grep -w "Thread(s) per core:" | cut -c20-)
+b=$(lscpu | grep -w "Core(s) per socket:" | cut -c20-)
+
+c=$(cat /proc/meminfo | grep "MemTotal:" | tr -d [:alpha:]':') # total memory
+d=$(cat /proc/meminfo | grep "SwapTotal:" | tr -d [:alpha:]':') # total swap
+e=$(($c/1000000))
+f=$(($e*1024)) # total ram in GiB (including swap??)
+
+g=$(($d/1000000))
+h=$(($g*1024)) #total swap in GiB
+i=$(($f-$h))
+
+echo
+echo "---- General ----"
+echo -e 'Distro\t| ' $(grep -w 'PRETTY_NAME=' /etc/os-release | cut -c13- | tr -d '""' )
+echo -e 'Kernal\t| ' $(uname -rs)
+echo -e 'Uptime\t| ' $(uptime -p | cut -c3-)
+echo -ne 'Mobo\t| ' $(cat /sys/devices/virtual/dmi/id/board_{vendor,name,version})
+echo
+echo -e "\n---- CPU ----"
+echo -e 'Model\t| ' $(lscpu | grep -w "Model name:" | cut -c12-)
+echo -e 'Speed\t| ' $(lscpu | grep -w "CPU max MHz" | cut -c13-)
+echo -e 'Cores\t| ' $b
+echo -e 'Threads\t| ' "$(($a*$b))" 
+echo
+echo "---- GPU ----"
+echo -e 'GPU\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6)
+echo
+echo "---- RAM ----"
+
+if [ $h -gt $f ]; then
+	echo -e 'Memory\t| ' $(($f/1000))" GiB"
+	echo -e 'Swap\t| ' $(($h/1000))" GiB" 
+else
+	echo -e 'Memory\t| ' $(($i/1000))" GiB"
+        echo -e 'Swap\t| ' $(($h/1000))" GiB"
+fi
