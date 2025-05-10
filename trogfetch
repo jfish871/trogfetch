@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-a=$(lscpu | grep -w "Thread(s) per core:" | cut -c20-)
-b=$(lscpu | grep -w "Core(s) per socket:" | cut -c20-)
+a=$(lscpu | awk -F '/Thread\(s\) per core/ { print $2 }' | xargs )
+b=$(lscpu | awk -F '/Core\(s\) per socket/ { print $2 }' | xargs )
 
 c=$(cat /proc/meminfo | grep "MemTotal:" | tr -d [:alpha:]':') # total memory
 d=$(cat /proc/meminfo | grep "SwapTotal:" | tr -d [:alpha:]':') # total swap
