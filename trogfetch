@@ -4,25 +4,30 @@ a=$(lscpu | grep -w "Thread(s) per core:" | cut -c20-)
 b=$(lscpu | grep -w "Core(s) per socket:" | cut -c20-)
 c=$(lscpu | grep -w "Model name:" | cut -c12- | grep 'w/' | cut -d "/" -f2)
 
-
 echo
 echo "---- General ----"
 echo -e 'Name\t| ' $(hostname)
 echo -e 'Distro\t| ' $(grep -w 'PRETTY_NAME=' /etc/os-release | cut -c13- | tr -d '""' )
 echo -e 'Kernal\t| ' $(uname -rs)
 echo -e 'Uptime\t| ' $(uptime -p | cut -c3-)
-echo -ne 'Mobo\t| ' $(cat /sys/devices/virtual/dmi/id/board_{vendor,name,version})
+echo -e 'Mobo\t| ' $(cat /sys/devices/virtual/dmi/id/board_{vendor,name,version})
+echo -e 'IPv4\t| ' $(hostname -i  | cut -d " " -f3)
+#echo -e 'IPv6\t| ' $(hostname -i  | cut -d " " -f2)
 echo
-echo -e "\n---- CPU ----"
+echo -e "---- CPU ----"
 echo -e 'Model\t| ' $(lscpu | grep -w "Model name:" | cut -c12-)
-echo -e 'Speed\t| ' $(lscpu | grep -w "CPU max MHz" | cut -c13-)
+echo -e 'Brand\t| ' $(lscpu | grep -w "Vendor ID:" | cut -c11-)
+echo -e 'Arch\t| ' $(lscpu | grep -w "Architecture:" | cut -c14-)
+echo -e 'Mode(s)\t| ' $(lscpu | grep -w "CPU op-mode(s):" | cut -c16-)
+echo -e 'Speed\t| ' $(lscpu | grep -w "CPU max MHz" | cut -c13- | cut -d "." -f1)"MHz"
 echo -e 'Cores\t| ' $b
-echo -e 'Threads\t| ' "$(($a*$b))" 
+echo -e 'Threads\t| ' $(($a*$b))
 echo
 echo "---- GPU ----"
 
 if [ $(echo $c | wc -c) -gt 1 ]; then 
 	echo -e 'GPU\t| ' $c
+	echo -e 'Brand\t| ' $(lspci -m | grep "VGA" | cut -d '"' -f8 | cut -d '/' -f2)
 	echo
 else
 	echo -e 'GPU(s)\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6 | cut -d "[" -f2 | tr -d "]")
