@@ -7,6 +7,7 @@ c=$(lscpu | grep -w "Model name:" | cut -c12- | grep 'w/' | cut -d "/" -f2)
 
 echo
 echo "---- General ----"
+echo -e 'Name\t| ' $(hostname)
 echo -e 'Distro\t| ' $(grep -w 'PRETTY_NAME=' /etc/os-release | cut -c13- | tr -d '""' )
 echo -e 'Kernal\t| ' $(uname -rs)
 echo -e 'Uptime\t| ' $(uptime -p | cut -c3-)
@@ -24,7 +25,8 @@ if [ $(echo $c | wc -c) -gt 1 ]; then
 	echo -e 'GPU\t| ' $c
 	echo
 else
-	echo -e 'GPU\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6 | cut -d "[" -f2 | tr -d "]")
+	echo -e 'GPU(s)\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6 | cut -d "[" -f2 | tr -d "]")
+	echo -e 'Brand\t| ' $(lspci -m | grep "VGA" | cut -d '"' -f8 | cut -d '/' -f2)
 	echo
 fi
 
