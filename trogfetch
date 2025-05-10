@@ -1,7 +1,4 @@
-#!/usr/bin/bash
-
-echo > temp.txt
-
+#!/usr/bin/env bash
 
 a=$(lscpu | grep -w "Thread(s) per core:" | cut -c20-)
 b=$(lscpu | grep -w "Core(s) per socket:" | cut -c20-)
