@@ -3,8 +3,9 @@
 a=$(lscpu | awk -F '/Thread\(s\) per core/ { print $2 }' | xargs )
 b=$(lscpu | awk -F '/Core\(s\) per socket/ { print $2 }' | xargs )
 
-c=$(cat /proc/meminfo | grep "MemTotal:" | tr -d [:alpha:]':') # total memory
-d=$(cat /proc/meminfo | grep "SwapTotal:" | tr -d [:alpha:]':') # total swap
+c=$(awk '/MemTotal:/ {print $2}' /proc/meminfo) # in KiB
+d=$(awk '/SwapTotal:/ {print $2}' /proc/meminfo) # in KiB
+
 e=$(($c/1000000))
 f=$(($e*1024)) # total ram in GiB (including swap??)
 
