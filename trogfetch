@@ -1,19 +1,7 @@
 #!/usr/bin/bash
 
-echo > temp.txt
-
-
 a=$(lscpu | grep -w "Thread(s) per core:" | cut -c20-)
 b=$(lscpu | grep -w "Core(s) per socket:" | cut -c20-)
-
-c=$(cat /proc/meminfo | grep "MemTotal:" | tr -d [:alpha:]':') # total memory
-d=$(cat /proc/meminfo | grep "SwapTotal:" | tr -d [:alpha:]':') # total swap
-e=$(($c/1000000))
-f=$(($e*1024)) # total ram in GiB (including swap??)
-
-g=$(($d/1000000))
-h=$(($g*1024)) #total swap in GiB
-i=$(($f-$h))
 
 echo
 echo "---- General ----"
@@ -32,5 +20,11 @@ echo "---- GPU ----"
 echo -e 'GPU\t| ' $(lspci -m | grep 'VGA' | cut -d '"' -f6)
 echo
 echo "---- RAM ----"
-echo -e 'Memory\t| ' $(($f/1000))" GiB"
-echo -e 'Swap\t| ' $(($h/1000))" GiB" 
+echo -e 'Memory\t| ' $(free -h | grep "Mem:" | cut -c5- | tr -s [:blank:] | tr ' ' ':'  | cut -d ':' -f2)"B"
+echo -e 'Used\t| ' $(free -h | grep "Mem:" | cut -c5- | tr -s [:blank:] | tr ' ' ':'  | cut -d ':' -f3)"B"
+echo -e 'Free\t| ' $(free -h | grep "Mem:" | cut -c5- | tr -s [:blank:] | tr ' ' ':'  | cut -d ':' -f4)"B"
+echo
+echo "---- Swap ----"
+echo -e 'Swap\t| ' $(free -h | grep "Swap:" | cut -c6- | tr -s [:blank:] | tr ' ' ':'  | cut -d ':' -f2)"B"
+echo -e 'Free\t| ' $(free -h | grep "Swap:" | cut -c6- | tr -s [:blank:] | tr ' ' ':'  | cut -d ':' -f4)"B"
+echo
