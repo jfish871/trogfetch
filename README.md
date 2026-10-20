@@ -1,3 +1,8 @@
-Howdy fellow netizen, welcome to my silly repo. This is my attempt at making a neofetch clone. It is very simple, and does not display ASCII art. You can run the program by first making it executable with "chmod +x trogfetch", then running the script with ./trogfetch. Have fun!
+A simple but detailed neofetch clone written in bash. Plans to add the ascii logo later <br>
+Notable features include extra details regarding motherboard and CPU. <br>
 
-Try something like 'ip a | grep inet' that should work better than 'hostname -i'
+To use, simply open the file in your terminal, type `chmod +x neo-trogfetch` then run with `./neo-trogfetch`. Simple right? 
+
+This is more so a personal project than something actually worth using... <br>
+This is a fork of trogfetch which you can get here: https://github.com/jfish871/trogfetch <br>
+Just use mfetch if you want something in bash that is actually lightweight AND customizable: https://github.com/Nighty3098/mfetch
